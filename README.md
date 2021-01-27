@@ -37,7 +37,7 @@ python3 train.py
 To evaluate existing model:
 ```bash
 cd training
-python3 evaluate.py
+python3 eval.py
 ```
 
 ### Using Docker
@@ -56,5 +56,6 @@ python3 train.py
 To evaluate existing model:
 ```bash
 cd training
-python3 evaluate.py
+python3 eval.py
 ```
+After evaluation see ROC curve plot in directory and balanced accuracy in plot's name last value
