@@ -1,0 +1,16 @@
+jupyterlab
+numpy
+Pillow
+python-multipart
+torch
+torchvision
+pytorch-lightning
+opencv-python==4.5.1.48
+opencv-contrib-python
+matplotlib
+scikit-learn
+seaborn
+pandas
+tensorboard
+split-folders
+
