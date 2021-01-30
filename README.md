@@ -53,11 +53,26 @@ jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
 To train new model
 ```bash
 cd training
-python3 train.py
+python3 train.py **<model_num>**
 ```
 To evaluate existing model:
 ```bash
 cd training
-python3 eval.py
+python3 eval.py <model_num>
 ```
-After evaluation see ROC curve plot in directory and balanced accuracy in plot's name last value
+Here **<model_name>** is variable that used to specify which model to be trained.
+Set **0** to train model that predicts 5 classes such as:
+
+0 - blue team
+1 - white team
+2 - main referee
+3 - side referee
+4 - others
+
+Set **1** to train model that predicts ID of the blue team players
+Set **2** to train model that predicts ID of the white team players
+Set **3** to train one universal model that predicts any class of 25 used
+
+
+
+After evaluation see ROC curve plot in directory and balanced accuracy in plot's name last value.
