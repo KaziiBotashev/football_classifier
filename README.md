@@ -11,7 +11,7 @@ Terminal
 ```bash
 curl -X POST "http://127.0.0.1:5000/predict/?use_individual_models=true" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "file=@/path/to/your/image.png;type=image/png"
 ```
-You need to specify which approach will be used for classification by setting the variable use_individual_models in your query. Set **true** to use a method based on three separate sequential models, or **false** to use one universal model.
+You need to specify which approach will be used for classification by setting the variable **use_individual_models** in your query. Set **true** to use a method based on three separate sequential models, or **false** to use one universal model.
 
 Or open GUI in your browser with following link  http://127.0.0.1:5000/docs
 
