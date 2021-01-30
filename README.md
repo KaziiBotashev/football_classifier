@@ -50,7 +50,7 @@ To launch data preprocessing pipeline
 ```bash
 jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
 ```
-Navigate to deep_learning_model/training and open data_preprocessing.ipynb notebook.
+Navigate to **deep_learning_model/training** and open **data_preprocessing.ipynb** notebook.
 
 To train new model
 ```bash
