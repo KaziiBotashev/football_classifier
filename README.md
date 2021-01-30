@@ -53,7 +53,7 @@ jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
 To train new model
 ```bash
 cd training
-python3 train.py **<model_num>**
+python3 train.py <model_num>
 ```
 To evaluate existing model:
 ```bash
