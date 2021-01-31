@@ -11,6 +11,9 @@ __pycache__/
 #ckpt files
 *.ckpt
 
+deep_learning_model/data
+deep_learning_model/trained_model
+
 # Distribution / packaging
 .Python
 build/

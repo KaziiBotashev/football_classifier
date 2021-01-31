@@ -27,44 +27,43 @@ if __name__ == '__main__':
         num_classes = 11
     elif team_num == 3:
         num_classes = 25
-    model_name = "soccernet-"+str(team_num)+'.ckpt'
-    model = Classifier(team_num).load_from_checkpoint("../trained_model/" + model_name, team_num = team_num)
+    model_name = "soccernet-" + str(team_num) + '.ckpt'
+    model = Classifier(team_num).load_from_checkpoint(
+        "../trained_model/" + model_name, team_num=team_num)
     model.eval()
     model.freeze()
     model = model.to(device)
     pl.seed_everything(42)
     model.prepare_data()
     dataloader = model.test_dataloader()
-    
+
     preds = []
     prob_preds = []
     labels = []
     k = 0
     for x, y in dataloader:
-        x,y = x.to(device), y.to(device)
+        x, y = x.to(device), y.to(device)
         y_hat = model(x)
         pred = torch.exp(y_hat)
         prob_preds.append(pred.cpu().numpy())
-        pred = torch.argmax(pred,dim = 1).cpu().numpy().reshape(-1).tolist()
+        pred = torch.argmax(pred, dim=1).cpu().numpy().reshape(-1).tolist()
         preds += (pred)
         labels += (y.cpu().numpy().reshape(-1).tolist())
         print(k)
-        k+=1
+        k += 1
     prob_preds = np.array(prob_preds)
     preds = np.array(preds).reshape(-1)
     labels = np.array(labels).reshape(-1)
 
-
-    balanced_acc = balanced_accuracy_score(preds,labels)
+    balanced_acc = balanced_accuracy_score(preds, labels)
     print("Accuracy: ", balanced_acc)
-    print(classification_report(preds,labels))
+    print(classification_report(preds, labels))
 
     y_score = np.vstack(prob_preds.tolist())
-    y_test = label_binarize(labels, classes = range(num_classes))
+    y_test = label_binarize(labels, classes=range(num_classes))
 
     # Plot linewidth.
     lw = 2
-
 
     # Compute ROC curve and ROC area for each class
     fpr = dict()
@@ -96,7 +95,7 @@ if __name__ == '__main__':
     roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
 
     # Plot all ROC curves
-    plt.figure(figsize=(30,15))
+    plt.figure(figsize=(30, 15))
     plt.plot(fpr["micro"], tpr["micro"],
              label='micro-average ROC curve (area = {0:0.2f})'
                    ''.format(roc_auc["micro"]),
@@ -108,7 +107,7 @@ if __name__ == '__main__':
              color='navy', linestyle=':', linewidth=4)
 
     cm = plt.get_cmap('gist_rainbow')
-    colors = cycle([cm(1.*i/num_classes) for i in range(num_classes)])
+    colors = cycle([cm(1. * i / num_classes) for i in range(num_classes)])
     for i, color in zip(range(num_classes), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=lw,
                  label='ROC curve of class {0} (area = {1:0.2f})'
@@ -121,5 +120,5 @@ if __name__ == '__main__':
     plt.ylabel('True Positive Rate')
     plt.title('ROC curve')
     plt.legend(loc="lower right")
-    plt.savefig("roc_curve_"+ model_name+ "_" + str(balanced_acc) +".png")
+    plt.savefig("roc_curve_" + model_name + "_" + str(balanced_acc) + ".png")
     plt.show()

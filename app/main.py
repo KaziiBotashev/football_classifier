@@ -18,35 +18,39 @@ app = FastAPI()
 
 image_classifier = ImageClassifier()
 
+
 @app.post("/predict/", response_model=PredictionResponseDto)
-async def predict(use_individual_models: bool, file: UploadFile = File(...)):    
+async def predict(use_individual_models: bool, file: UploadFile = File(...)):
     if file.content_type.startswith('image/') is False:
-        raise HTTPException(status_code=400, detail=f'File \'{file.filename}\' is not an image.')    
+        raise HTTPException(
+            status_code=400,
+            detail=f'File \'{file.filename}\' is not an image.')
 
     try:
         contents = await file.read()
         image = Image.open(io.BytesIO(contents)).convert('RGB')
         if image.size[0] <= 100:
-            image = np.array(image) 
+            image = np.array(image)
             image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-            
-            
-            sr_model_path = os.path.join('deep_learning_model', 'trained_model', 'FSRCNN_x4.pb')  
+
+            sr_model_path = os.path.join(
+                'deep_learning_model', 'trained_model', 'FSRCNN_x4.pb')
             sr = dnn_superres.DnnSuperResImpl_create()
             sr.readModel(sr_model_path)
             sr.setModel("fsrcnn", 4)
-            image = sr.upsample(image) 
+            image = sr.upsample(image)
 
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(image)
-        
+
         print(use_individual_models)
-        predicted_class = image_classifier.predict(image, use_individual_models)
-        
+        predicted_class = image_classifier.predict(
+            image, use_individual_models)
+
         logging.info(f"Predicted Class: {predicted_class}")
         return {
-            "filename": file.filename, 
-            "contentype": file.content_type,            
+            "filename": file.filename,
+            "contentype": file.content_type,
             "label": predicted_class,
         }
     except Exception as error:
