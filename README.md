@@ -9,8 +9,10 @@ sudo bash run_docker_api.sh
 ### Make a query
 Terminal
 ```bash
-curl -X POST "http://127.0.0.1:5000/predict/" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "file=@path/to/your/image.png;type=image/png"
+curl -X POST "http://127.0.0.1:5000/predict/?use_individual_models=true" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "file=@/path/to/your/image.png;type=image/png"
 ```
+You need to specify which approach will be used for classification by setting the variable **use_individual_models** in your query. Set **true** to use a method based on three separate sequential models, or **false** to use one universal model.
+
 Or open GUI in your browser with following link  http://127.0.0.1:5000/docs
 
 ## Reuse data preprocessing and model training
@@ -48,14 +50,31 @@ To launch data preprocessing pipeline
 ```bash
 jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
 ```
+Navigate to **deep_learning_model/training** and open **data_preprocessing.ipynb** notebook.
+
 To train new model
 ```bash
 cd training
-python3 train.py
+python3 train.py <model_num>
 ```
 To evaluate existing model:
 ```bash
 cd training
-python3 eval.py
+python3 eval.py <model_num>
 ```
-After evaluation see ROC curve plot in directory and balanced accuracy in plot's name last value
+Here **<model_name>** is variable that used to specify which model to be trained.
+Set **0** to train model that predicts 5 classes such as:
+
+0 - blue team
+1 - white team
+2 - main referee
+3 - side referee
+4 - others
+
+Set **1** to train model that predicts ID of the blue team players
+Set **2** to train model that predicts ID of the white team players
+Set **3** to train one universal model that predicts any class of 25 used
+
+
+
+After evaluation see ROC curve plot in directory and balanced accuracy in plot's name last value.

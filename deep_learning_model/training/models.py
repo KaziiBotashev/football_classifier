@@ -8,17 +8,28 @@ import pytorch_lightning as pl
 
 try:
     import config
+    from model_architecture import SoccerNet, SoccerNet_category_id, SoccerNet_player_id
 except:
     from deep_learning_model.training import config
+    from deep_learning_model.training.model_architecture import SoccerNet, SoccerNet_category_id, SoccerNet_player_id
+
 
 class Classifier(LightningModule):
-    def __init__(self):
+    def __init__(self, team_num):
         super().__init__()
         self.transform = config.TRANSFORM
         self.train_batch_size = config.TRAIN_BATCH_SIZE
         self.val_batch_size = config.VAL_BATCH_SIZE
         self.test_batch_size = config.TEST_BATCH_SIZE        
-        self.model = config.MODEL
+        self.team = team_num
+        if team_num == 0:
+            self.model = SoccerNet_category_id()
+        if team_num == 1:
+            self.model = SoccerNet_player_id()
+        if team_num == 2:
+            self.model = SoccerNet_player_id()
+        if team_num == 3:
+            self.model = SoccerNet()
         self.learning_rate = config.LEARNING_RATE  
 
     def forward(self, x):
@@ -29,15 +40,14 @@ class Classifier(LightningModule):
         return nn.CrossEntropyLoss()(outputs, labels)
 
     def prepare_data(self):
-        self.trainset = datasets.ImageFolder("../data/images_splited_balanced_upscaled/train", transform=self.transform)
-        self.valset = datasets.ImageFolder("../data/images_splited_balanced_upscaled/val", transform=self.transform)
-        self.testset = datasets.ImageFolder("../data/images_splited_balanced_upscaled/test", transform=self.transform)
-        
+            self.trainset = datasets.ImageFolder("../data/images_splited_balanced_upscaled_team"+str(self.team)+"/train", transform=self.transform)
+            self.valset = datasets.ImageFolder("../data/images_splited_balanced_upscaled_team"+str(self.team)+"/val", transform=self.transform)
+            self.testset = datasets.ImageFolder("../data/images_splited_balanced_upscaled_team"+str(self.team)+"/test", transform=self.transform) 
 
 
     def train_dataloader(self):        
         trainloader = DataLoader(self.trainset, batch_size=self.train_batch_size,
-                                          shuffle=True)
+                                          shuffle=True, drop_last=True)
         return trainloader                                             
 
     def val_dataloader(self):
@@ -97,6 +107,7 @@ class Classifier(LightningModule):
         optimizer = Adam(self.parameters(), lr=self.learning_rate)
         return {
        'optimizer': optimizer,
-       'lr_scheduler': torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,verbose = True, patience = 5),
+       'lr_scheduler': torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,verbose = True, patience = 10),
        'monitor': 'val_loss_epoch'
         }
+

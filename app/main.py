@@ -19,7 +19,7 @@ app = FastAPI()
 image_classifier = ImageClassifier()
 
 @app.post("/predict/", response_model=PredictionResponseDto)
-async def predict(file: UploadFile = File(...)):    
+async def predict(use_individual_models: bool, file: UploadFile = File(...)):    
     if file.content_type.startswith('image/') is False:
         raise HTTPException(status_code=400, detail=f'File \'{file.filename}\' is not an image.')    
 
@@ -40,8 +40,8 @@ async def predict(file: UploadFile = File(...)):
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(image)
         
-
-        predicted_class = image_classifier.predict(image)
+        print(use_individual_models)
+        predicted_class = image_classifier.predict(image, use_individual_models)
         
         logging.info(f"Predicted Class: {predicted_class}")
         return {
