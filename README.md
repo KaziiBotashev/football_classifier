@@ -75,6 +75,10 @@ Set **1** to train model that predicts ID of the blue team players
 Set **2** to train model that predicts ID of the white team players
 Set **3** to train one universal model that predicts any class of 25 used
 
-
-
 After evaluation see ROC curve plot in directory and balanced accuracy in plot's name last value.
+
+To evaluate two-step algorithm use:
+```bash
+cd training
+python3 evaluate_combination_models.py
+```
