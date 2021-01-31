@@ -4,6 +4,7 @@ import torchvision
 
 
 class ConvNet(nn.Module):
+    #Simple two layered CNN
     def __init__(self):
         super(ConvNet, self).__init__()
         self.layer1 = nn.Sequential(
@@ -29,6 +30,8 @@ class ConvNet(nn.Module):
 
 
 class SoccerNet(nn.Module):
+    #Network with four data streams. One is a full image processed by ResNet50, 
+    #other three - head, torso, legs processed by three ConvNets. Predicts one of 25 classes.
     def __init__(self):
         super(SoccerNet, self).__init__()
         self.stream_body = torchvision.models.resnet50(pretrained=False)
@@ -47,15 +50,10 @@ class SoccerNet(nn.Module):
         model_dict.update(pretrain_dict)
         self.stream_body.load_state_dict(model_dict)
 
-        # self.stream_body = torchvision.models.resnet34(pretrained=True) #default resnet
-        # self.stream_body.fc = nn.Dropout(0.5)
-
         self.stream_head = ConvNet()
         self.stream_torso = ConvNet()
         self.stream_legs = ConvNet()
 
-        # self.linear = nn.Sequential(nn.Linear(1280,512), nn.ReLU(),
-        # nn.Linear(512,128), nn.ReLU(), nn.Linear(128,25)) #default resnet
         self.linear = nn.Sequential(
             nn.Linear(
                 1768, 512), nn.BatchNorm1d(512), nn.ReLU(), nn.Linear(
@@ -79,6 +77,7 @@ class SoccerNet(nn.Module):
 
 
 class SoccerNet_category_id(nn.Module):
+    #Network to predict to which team or not player belongs.
     def __init__(self):
         super(SoccerNet_category_id, self).__init__()
         self.stream_body = ConvNet()
@@ -96,6 +95,9 @@ class SoccerNet_category_id(nn.Module):
 
 
 class SoccerNet_player_id(nn.Module):
+    #Network with four data streams. One is a full image processed by ResNet50, 
+    #other three - head, torso, legs processed by three ConvNets. Predicts one of 11 classes.
+    #Use separately for each team.
     def __init__(self):
         super(SoccerNet_player_id, self).__init__()
         self.stream_body = torchvision.models.resnet50(pretrained=False)

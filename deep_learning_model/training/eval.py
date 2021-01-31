@@ -14,7 +14,7 @@ from sklearn.preprocessing import label_binarize
 from scipy import interp
 from itertools import cycle
 
-
+#Compute metrics for test dataset and one model and save ROC curve
 if __name__ == '__main__':
     team_num = int(sys.argv[1])
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

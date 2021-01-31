@@ -10,6 +10,7 @@ import os
 
 class ImageClassifier:
     def __init__(self):
+        #Initializing of all trained models and loading of weights
         models_dir_path = 'deep_learning_model/trained_model/soccernet-'
 
         self.classifier_0 = Classifier(0).load_from_checkpoint(
@@ -33,7 +34,7 @@ class ImageClassifier:
         self.classifier_3.freeze()
 
     def predict(self, image, use_individual_models):
-
+        #Predicts labels using two-step model or one model
         transforms_image = transforms.Compose(
             [
                 SquarePad(), transforms.Resize(

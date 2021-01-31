@@ -4,6 +4,7 @@ import numpy as np
 
 class SquarePad:
     def __call__(self, image):
+        #Make square image with a side equal to the bigger side of input image
         w, h = image.size
         max_wh = np.max([w, h])
         hp = int((max_wh - w) / 2)

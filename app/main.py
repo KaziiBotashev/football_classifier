@@ -21,6 +21,7 @@ image_classifier = ImageClassifier()
 
 @app.post("/predict/", response_model=PredictionResponseDto)
 async def predict(use_individual_models: bool, file: UploadFile = File(...)):
+    # API main procedure. Takes image and predicts image label using ImageClassifier
     if file.content_type.startswith('image/') is False:
         raise HTTPException(
             status_code=400,

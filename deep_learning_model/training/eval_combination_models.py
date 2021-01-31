@@ -11,6 +11,7 @@ import numpy as np
 
 from sklearn.metrics import balanced_accuracy_score, f1_score, classification_report
 
+#Compute metrics for test dataset using two-step algotirthm and save ROC curve
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     models_dir_path = '../trained_model/soccernet-'
