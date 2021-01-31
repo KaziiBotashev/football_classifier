@@ -6,6 +6,8 @@ In parent directory run
 ```bash
 sudo bash run_docker_api.sh
 ```
+It will automatically download all needed files and run Docker container.
+
 ### Make a query
 Terminal
 ```bash
@@ -17,7 +19,7 @@ Or open GUI in your browser with following link  http://127.0.0.1:5000/docs
 
 ## Reuse data preprocessing and model training
 If you want to train new model follow these steps.
-
+Both steps will automatically download all needed model weights and datasets.
 First of all change to deep learning part's directory with
 ```bash
 cd deep_learning_model
