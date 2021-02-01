@@ -48,11 +48,14 @@ python3 eval.py
 ```bash
 sudo bash run_docker_train.sh
 ```
-To launch data preprocessing pipeline
+All preprocessed data already downloaded during env/docker initialization and you can skip next step and start train new models. 
+
+However, you can launch data preprocessing pipeline using:
 ```bash
 jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
 ```
 Navigate to **deep_learning_model/training** and open **data_preprocessing.ipynb** notebook.
+
 
 To train new model
 ```bash
